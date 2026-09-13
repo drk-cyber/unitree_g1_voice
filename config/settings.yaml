@@ -1,0 +1,65 @@
+# ============================================================
+# G1 语音控制 配置（阶段1：Windows 原型）
+# 没写到的字段用 app/config.py 里的默认值；协议见 README
+# ============================================================
+
+app:
+  mode: assistant          # chat = 第2周对话原型；assistant = 第3周完整流程（唤醒/意图/安全层）
+  log_dir: logs
+  fake_action_seconds: 0.5 # FakeRobot 模拟动作耗时（秒），体验流程用
+  save_utterances: false   # true 时把每句录音存到 logs/utterances/（调试识别问题用）
+
+audio:
+  sample_rate: 16000       # ASR 要求 16k 单声道
+  input_device: null       # null = 系统默认麦克风；可填设备序号/名称（--list-devices 查看）
+  silence_timeout: 2.5     # 唤醒后这么久没听到指令 → 回 IDLE
+  end_silence: 1.2         # 说完一句话后静音多久算结束（自动断句）
+  max_duration: 10         # 单次录音上限（秒），超过自动截断
+  min_duration: 0.2        # 短于此长度的音频当作噪音丢弃
+  energy_threshold: 0.02   # 语音能量阈值（RMS 0~1）。环境吵调大；说话没反应调小（--calibrate-mic 辅助）
+
+wake:
+  require_wake: true       # true：必须以唤醒词开头才处理（调试可设 false 免唤醒）
+  words: ["小宇", "小雨", "小语", "小余"]   # 唤醒词 + 常见同音字
+
+stop:
+  # 命中任一词 → 立即停止：不需要唤醒词、不经过大模型、不需要确认（安全规范第1条）
+  words: ["停", "别动", "站住"]
+  # 否定保护：这些词出现时不当作停止指令（例如“不要停下来”）
+  guard_words: ["别停", "不要停", "别停止", "不要停止"]
+
+confirm:
+  # 执行 stand/sit/wave 前的语音确认；是否需要确认由 actions.confirm_required 决定
+  words_yes: ["确认", "确定", "是的", "是", "对", "没错", "好", "好的", "嗯", "嗯嗯", "可以", "执行", "ok", "OK"]
+  words_no: ["不", "不要", "不行", "不可以", "取消", "算了", "别"]
+
+llm:
+  backend: ollama          # ollama | rules（rules = 关键词解析，不需要大模型）
+  fallback_to_rules: true  # Ollama 不可用 / 输出非法时自动退回关键词解析（附录 D 备选方案）
+  ollama:
+    host: http://127.0.0.1:11434
+    model: qwen2.5:3b      # 显存 ≥8GB 可试 qwen2.5:7b
+    timeout: 60            # 秒（首次调用要把模型载入显存，需容忍冷启动；热身后 <2 秒）
+    temperature: 0.1       # 意图解析要稳定，温度调低
+
+actions:
+  whitelist: [stand, sit, wave, stop]   # 安全层只放行这些（安全规范第2条）
+  confirm_required: [stand, sit, wave]  # 这些动作执行前要语音确认；stop 永远直通
+  cooldown: 3.0            # 相邻动作最小间隔（秒），README 要求 ≥3（安全规范第4条）
+  chinese_names:
+    stand: 站立
+    sit: 坐下
+    wave: 挥手
+    stop: 停止
+
+tts:
+  engine: edge             # edge（需联网）| console（只打印不出声，无音箱时用）
+  speak_pause: 0.2         # 播报完停顿（秒），避免自己的声音被麦克风录进去
+  edge:
+    voice: zh-CN-XiaoxiaoNeural   # 也可试 zh-CN-YunxiNeural（男声）
+    rate: "+0%"
+
+asr:
+  model: iic/SenseVoiceSmall
+  device: cpu              # 有 NVIDIA 显卡可改 cuda:0 加速识别
+  language: zh             # 固定中文，识别更稳

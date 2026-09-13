@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "stop-20260913T040150294Z-16380-67f1fab5aa8e",
+  "runId": "20260913T040150294Z-16380-67f1fab5aa8e",
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": []
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "Stop"
+  },
+  "revision": "bb49d98e1f6373f9f1154870551b301478104522",
+  "diffHash": "e2547f6d5d11b3ba5aac88b969222d045469f50b3ec835c5496f9f0be664e878",
+  "rulesVersion": "unavailable",
+  "sessionHash": "7f6361e2831a1d45ef3800ef9583e7e0b40bc6ebe2cd8067f462c9becc585185",
+  "reportRef": ".mimosa/reports/task-review-sess_906f8c30-3198-4e58-bbce-70dca787280e-20260913T040150294Z-16380-67f1fab5aa8e.json",
+  "events": [],
+  "observedFindingIds": [],
+  "verifiedFiles": [
+    {
+      "file": "scripts/import_qwen_ollama.py",
+      "direct": "complete",
+      "projectContext": "partial"
+    }
+  ],
+  "recordedAt": "2026-09-13T04:01:50.761Z"
+}

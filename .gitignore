@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 运行产物
+logs/
+models/
+*.wav
+*.mp3
+
+# IDE / 系统
+.vscode/
+.idea/
+Thumbs.db

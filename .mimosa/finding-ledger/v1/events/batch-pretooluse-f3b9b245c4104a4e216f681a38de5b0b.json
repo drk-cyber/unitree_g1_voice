@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "mimosa-finding-ledger-batch/v1",
+  "batchId": "pretooluse-f3b9b245c4104a4e216f681a38de5b0b",
+  "runId": null,
+  "runStatus": "completed",
+  "coverage": {
+    "status": "complete",
+    "reasons": []
+  },
+  "source": {
+    "component": "zcode-hook",
+    "operationId": "PreToolUse"
+  },
+  "revision": null,
+  "diffHash": null,
+  "rulesVersion": null,
+  "sessionHash": "7f6361e2831a1d45ef3800ef9583e7e0b40bc6ebe2cd8067f462c9becc585185",
+  "reportRef": null,
+  "events": [
+    {
+      "eventId": "hook-1c80f3a2d37087983eb5c35150bd997b",
+      "findingId": "mimosa-9e0c34c8f037929c4327ccf6",
+      "type": "finding_blocked",
+      "at": "2026-09-12T11:21:31.294Z",
+      "identity": {
+        "projectRelativeFile": "scripts/import_qwen_ollama.py",
+        "ruleId": "security",
+        "codeEvidenceHash": "64f1effc0ee58849921f07dd135af248ddfef24cec3331096684737885217b74",
+        "confidence": "stable"
+      },
+      "scope": "direct",
+      "line": 74,
+      "endLine": 74,
+      "reasonCode": "deny",
+      "reportedToAgent": true,
+      "evidence": {
+        "kind": "source",
+        "boundary": "candidate",
+        "producer": "deterministic",
+        "evidenceHash": "64f1effc0ee58849921f07dd135af248ddfef24cec3331096684737885217b74"
+      },
+      "sequence": 0
+    }
+  ],
+  "observedFindingIds": [],
+  "verifiedFiles": [],
+  "recordedAt": "2026-09-12T11:21:31.696Z"
+}
