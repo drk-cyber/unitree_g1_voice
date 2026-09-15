@@ -10,7 +10,7 @@ import logging
 import time
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import Union
+from typing import Optional, Union
 
 from app.config import TTSConfig
 
@@ -70,7 +70,7 @@ class EdgeTTS:
 class ConsoleTTS:
     """无音频设备/联调时的兜底：只打印不出声。"""
 
-    def __init__(self, cfg: TTSConfig | None = None):
+    def __init__(self, cfg: Optional[TTSConfig] = None):
         self.cfg = cfg
 
     def speak(self, text: str) -> None:

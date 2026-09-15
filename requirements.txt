@@ -1,4 +1,6 @@
 # ===== 阶段1 核心依赖（Windows 开发机）=====
+# 注：代码兼容 Python 3.8（Jetson JetPack 5）——在 3.8 环境安装时
+# pip 会自动解析各库的兼容旧版（如 numpy<1.25、pydantic<2.11），无需手动锁版本。
 numpy
 sounddevice        # 麦克风录音 / 播放（wheel 自带 PortAudio）
 soundfile          # wav 读写

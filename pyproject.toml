@@ -2,7 +2,7 @@
 name = "g1-voice-control"
 version = "0.1.0"
 description = "Unitree G1 EDU 语音控制 - 阶段1 Windows 原型"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

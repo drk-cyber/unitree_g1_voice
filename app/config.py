@@ -5,7 +5,7 @@ yaml 里没写的字段用这里的默认值，方便只覆盖想改的项。
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, List, Optional, Union
 
 import yaml
 from pydantic import BaseModel, ConfigDict
@@ -34,11 +34,11 @@ class AudioConfig(_Cfg):
 
 class WakeConfig(_Cfg):
     require_wake: bool = True
-    words: list[str] = ["小宇", "小雨", "小语", "小余"]
+    words: List[str] = ["小宇", "小雨", "小语", "小余"]
 
 
 class StopConfig(_Cfg):
-    words: list[str] = ["停", "别动", "站住"]
+    words: List[str] = ["停", "别动", "站住"]
     guard_words: list[str] = ["别停", "不要停", "别停止", "不要停止"]
 
 
@@ -67,7 +67,7 @@ class ActionConfig(_Cfg):
     whitelist: list[str] = ["stand", "sit", "wave", "stop"]
     confirm_required: list[str] = ["stand", "sit", "wave"]
     cooldown: float = 3.0
-    chinese_names: dict[str, str] = {
+    chinese_names: Dict[str, str] = {
         "stand": "站立", "sit": "坐下", "wave": "挥手", "stop": "停止",
     }
 

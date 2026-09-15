@@ -15,6 +15,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Sequence
 
 ROOT = Path(__file__).resolve().parent.parent
 GGUF_DIR = ROOT / "models" / "qwen2.5-3b-gguf"
@@ -45,7 +46,7 @@ def ollama_exe() -> str:
     raise SystemExit("找不到 ollama.exe，请确认 Ollama 已安装")
 
 
-def run_ollama(args: list[str]) -> int:
+def run_ollama(args: Sequence[str]) -> int:
     exe = ollama_exe()
     proc = subprocess.run(  # noqa: S603 - 参数为固定列表，无 shell
         [exe, *args], capture_output=True, text=True)

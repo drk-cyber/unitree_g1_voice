@@ -8,6 +8,18 @@
 
 ---
 
+## 当前进度（2026-09-13 更新）
+
+| 阶段 | 状态 |
+|---|---|
+| 阶段 0 硬件确认 | 大部分完成：Jetson 为 JetPack 5（Ubuntu 20.04 / ROS Foxy 出厂环境），16GB 统一内存，2TB 硬盘；Windows 为 RTX 5060 8GB。IP / SSH 账号 / SDK 版本待机器人上电后补记 |
+| 阶段 1 Windows 原型 | **代码全部完成**：录音断句 / SenseVoice 识别 / Ollama+Qwen 意图解析 / 安全层 / FakeRobot / 63 个单测全绿 / TTS→ASR→LLM 全链路冒烟通过。人工验收（20 轮对话 + 12 用例）进行中 |
+| 阶段 2～6 | 未开始；阶段 2 运行手册见 `docs/PHASE2.md` |
+
+环境就绪情况：conda 环境 `unitree`（Python 3.11）开发调试；Ollama 0.34.0 已装，`qwen2.5:3b` 已通过 ModelScope GGUF 离线导入（registry.ollama.org 不可达时的方案，Jetson 上同样适用，脚本 `scripts/import_qwen_ollama.py`）；代码已做 **Python 3.8 兼容**（Jetson 直接可用）。日常操作见 `docs/PHASE1.md`。
+
+---
+
 ## 一、总体架构
 
 **开发期（阶段 1～3）：大脑在 Windows，执行在 Jetson**
@@ -47,8 +59,8 @@ G1 麦克风 → 唤醒词"小宇" → SenseVoice 识别 → Qwen 意图 → 安
 | 项目 | 内容 | 状态 |
 |---|---|---|
 | 机器人 | Unitree G1 EDU（含机载 Jetson） | 已有 |
-| 开发机 | Windows + NVIDIA 显卡 | 已有（型号待确认） |
-| 机载计算 | Jetson Orin NX（**型号 / 内存待确认，见阶段 0**） | 待确认 |
+| 开发机 | Windows + NVIDIA 显卡 | 已有（RTX 5060 8GB，已确认） |
+| 机载计算 | Jetson，**16GB 统一内存，JetPack 5（Ubuntu 20.04 / ROS Foxy），2TB 硬盘**（具体型号 / IP 待上电补记） | 大部分已确认 |
 | 网络 | 电脑与 G1 同一局域网；G1 内网通常在 192.168.123.x 网段（以宇树文档为准） | 待确认 |
 | 安全 | 急停装置、空旷场地 | 必备 |
 | 建议购买 | 一个几十元的 USB 麦克风 + 小音箱（接 Jetson，过渡期测试用） | 可选 |
@@ -423,7 +435,19 @@ g1_voice_control/
 
 ## 现在就可以做的 4 件事
 
-1. SSH 登录 Jetson，跑阶段 0 的 5 条命令，填完硬件确认表；
-2. Windows 查显卡型号和显存；
-3. 安装 Python 3.10 / 3.11 + VS Code + Git；
-4. 建好项目仓库，先写 `fake_robot.py`，把阶段 1 的测试框架搭起来。
+1. ~~SSH 登录 Jetson，跑阶段 0 的 5 条命令，填完硬件确认表~~ → 基本配置已确认（见"当前进度"），剩余 IP / SSH 账号 / SDK 版本在机器人上电后补记到 `docs/PHASE2.md`；
+2. ~~Windows 查显卡型号和显存~~ → 已确认 RTX 5060 8GB，按计划用 qwen2.5:3b；
+3. ~~安装 Python 3.10 / 3.11 + VS Code + Git~~ → 已完成（conda 环境 `unitree`，Python 3.11）；
+4. ~~建好项目仓库，先写 `fake_robot.py`，把阶段 1 的测试框架搭起来~~ → **已完成**：阶段 1 代码 + 63 个单测全绿 + 全链路冒烟通过，验收进行中。
+
+## 附录 E：国内网络实测经验（2026-09）
+
+| 资源 | 直连情况 | 实测可用的替代 |
+|---|---|---|
+| ollama.com（安装包） | 不可达 / winget 卡死 | `https://ghproxy.net/https://github.com/ollama/ollama/releases/latest/download/OllamaSetup.exe`（实测 13MB/s） |
+| registry.ollama.org（`ollama pull`） | 不可达 | ModelScope 下载官方 GGUF 后 `ollama create` 导入：`python scripts/import_qwen_ollama.py --download` |
+| GitHub 一般仓库（如 unitree_sdk2_python） | 不稳定 | 同样走 ghproxy.net 前缀，或 Windows 下载后 `scp` 到 Jetson |
+| ModelScope（FunASR 模型、Qwen GGUF） | 快，直接用 | —— |
+| edge-tts（微软服务） | 可用 | —— |
+
+> 阶段 4 在 Jetson 上装 funasr / ollama 时直接照此办理；PyPI 本身可达，无需换源。

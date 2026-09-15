@@ -12,7 +12,7 @@ from __future__ import annotations
 import time
 from collections import deque
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 import sounddevice as sd
@@ -52,7 +52,7 @@ class Recorder:
 
     # ---------- 设备 ----------
 
-    def _open_stream(self) -> tuple[sd.InputStream, int]:
+    def _open_stream(self) -> Tuple[sd.InputStream, int]:
         """优先 16k 单声道；设备不支持就用它的默认采样率，录完重采样。"""
         try:
             stream = sd.InputStream(
